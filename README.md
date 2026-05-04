@@ -8,6 +8,7 @@ This project aims to develop a fault-tolerant data processing system that ensure
 ## Key Sections Highlighted:
 
 ✅ **Quick start** - Get running in 3 commands
+
 ✅ **Architecture** - Visual overview of data flow
 ✅ **Three critical questions answered:**
    - How prevents double counting
