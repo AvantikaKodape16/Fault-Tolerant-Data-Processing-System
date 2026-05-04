@@ -4,6 +4,13 @@
 This project aims to develop a fault-tolerant data processing system that ensures reliability and availability in data workloads. The architecture is designed to handle failures gracefully, ensuring that data integrity is preserved even in adverse conditions.
 
 ------
+## Tech Stack
+
+**Backend:** Python 3.8+, Flask 2.3, SQLAlchemy 2.0  
+**Frontend:** HTML5, CSS3, Vanilla JavaScript  
+**Database:** SQLite (dev), PostgreSQL-ready  
+**Libraries:** python-dateutil, Pydantic (optional), Flask-CORS
+------
 
 ## Key Sections Highlighted:
 
