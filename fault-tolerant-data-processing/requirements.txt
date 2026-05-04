@@ -1,0 +1,29 @@
+# Web Framework
+Flask==2.3.3
+Flask-CORS==4.0.0
+Werkzeug==2.3.7
+
+# Database & ORM
+SQLAlchemy==2.0.21
+SQLite3==1.1.0
+
+# Data Processing & Validation
+python-dateutil==2.8.2
+Pydantic==2.3.0
+marshmallow==3.20.1
+
+# Utilities
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Development (optional)
+pytest==7.4.2
+pytest-cov==4.1.0
+black==23.10.0
+flake8==6.1.0
+
+# Logging & Monitoring (optional)
+python-json-logger==2.0.7
+
+# Performance (optional)
+gunicorn==21.2.0

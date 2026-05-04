@@ -1,0 +1,172 @@
+{
+  "schema_version": "1.0",
+  "description": "Client-specific field mappings and validation rules",
+  "clients": {
+    "client_A": {
+      "name": "Client A",
+      "description": "Standard client with expected field names",
+      "field_mapping": {
+        "metric": "metric",
+        "amount": "amount",
+        "timestamp": "timestamp"
+      },
+      "required_fields": ["metric", "amount", "timestamp"],
+      "optional_fields": ["metadata", "tags"],
+      "field_types": {
+        "metric": "string",
+        "amount": "number",
+        "timestamp": "datetime"
+      },
+      "validation_rules": {
+        "amount": {
+          "min": 0,
+          "max": 1000000,
+          "type": "float"
+        },
+        "metric": {
+          "type": "string",
+          "min_length": 1,
+          "max_length": 200
+        }
+      }
+    },
+    "client_B": {
+      "name": "Client B",
+      "description": "Client with non-standard field names",
+      "field_mapping": {
+        "metric": "measure",
+        "amount": "val",
+        "timestamp": "ts"
+      },
+      "required_fields": ["measure", "val", "ts"],
+      "optional_fields": ["notes"],
+      "field_types": {
+        "measure": "string",
+        "val": "string|number",
+        "ts": "string"
+      },
+      "validation_rules": {
+        "val": {
+          "min": 0,
+          "type": "number"
+        }
+      },
+      "notes": "Client returns amount as string; needs conversion"
+    },
+    "client_C": {
+      "name": "Client C",
+      "description": "Client with nested payloads and extra fields",
+      "field_mapping": {
+        "metric": "metrics.name",
+        "amount": "data.total",
+        "timestamp": "event_time"
+      },
+      "required_fields": ["metrics", "data", "event_time"],
+      "optional_fields": ["user_id", "session_id", "custom_fields"],
+      "field_types": {
+        "metrics.name": "string",
+        "data.total": "number",
+        "event_time": "datetime"
+      },
+      "validation_rules": {
+        "metrics.name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_]+$"
+        }
+      },
+      "notes": "Supports nested objects; extra fields are ignored"
+    },
+    "default": {
+      "name": "Default Client",
+      "description": "Fallback configuration for unknown clients",
+      "field_mapping": {
+        "metric": "metric",
+        "amount": "amount",
+        "timestamp": "timestamp"
+      },
+      "required_fields": ["metric", "amount", "timestamp"],
+      "optional_fields": [],
+      "field_types": {
+        "metric": "string",
+        "amount": "number",
+        "timestamp": "datetime"
+      },
+      "validation_rules": {},
+      "strict_mode": false,
+      "notes": "Unknown clients fall back to default mapping; forward-compatible"
+    }
+  },
+  "global_settings": {
+    "timestamp_formats": [
+      "ISO8601",
+      "YYYY-MM-DD",
+      "YYYY/MM/DD",
+      "DD-MM-YYYY",
+      "unix",
+      "unix_ms"
+    ],
+    "number_formats": ["standard", "currency"],
+    "max_payload_size_kb": 1024,
+    "deduplication_enabled": true,
+    "hash_algorithm": "sha256"
+  },
+  "examples": {
+    "client_A": {
+      "input": {
+        "source": "client_A",
+        "payload": {
+          "metric": "sales",
+          "amount": "1200",
+          "timestamp": "2024-01-01T10:30:00Z"
+        }
+      },
+      "expected_output": {
+        "client_id": "client_A",
+        "metric": "sales",
+        "amount": 1200.0,
+        "timestamp": "2024-01-01T10:30:00Z"
+      }
+    },
+    "client_B": {
+      "input": {
+        "source": "client_B",
+        "payload": {
+          "measure": "revenue",
+          "val": "5000",
+          "ts": "2024/01/15",
+          "notes": "Q1 projection"
+        }
+      },
+      "expected_output": {
+        "client_id": "client_B",
+        "metric": "revenue",
+        "amount": 5000.0,
+        "timestamp": "2024-01-15T00:00:00Z"
+      }
+    },
+    "client_C": {
+      "input": {
+        "source": "client_C",
+        "payload": {
+          "metrics": {
+            "name": "user_engagement"
+          },
+          "data": {
+            "total": 2500
+          },
+          "event_time": "2024-01-20",
+          "user_id": "usr_123",
+          "custom_fields": {
+            "region": "APAC"
+          }
+        }
+      },
+      "expected_output": {
+        "client_id": "client_C",
+        "metric": "user_engagement",
+        "amount": 2500.0,
+        "timestamp": "2024-01-20T00:00:00Z"
+      }
+    }
+  }
+}
